@@ -46,11 +46,11 @@ h1.title {
   100% {
     top: -50px;
     opacity: 0; } }
-.scores-container {
+.levels-container {
   float: right;
   text-align: right; }
 
-.score-container, .best-container {
+.level-container, .best-container {
   position: relative;
   display: inline-block;
   background: #bbada0;
@@ -63,7 +63,7 @@ h1.title {
   color: white;
   margin-top: 8px;
   text-align: center; }
-  .score-container:after, .best-container:after {
+  .level-container:after, .best-container:after {
     position: absolute;
     width: 100%;
     top: 10px;
@@ -73,7 +73,7 @@ h1.title {
     line-height: 13px;
     text-align: center;
     color: #eee4da; }
-  .score-container .score-addition, .best-container .score-addition {
+  .level-container .level-addition, .best-container .level-addition {
     position: absolute;
     right: 30px;
     color: red;
@@ -89,8 +89,8 @@ h1.title {
     -moz-animation-fill-mode: both;
     animation-fill-mode: both; }
 
-.score-container:after {
-  content: "Score"; }
+.level-container:after {
+  content: "Level"; }
 
 .best-container:after {
   content: "Best"; }
@@ -328,7 +328,7 @@ hr {
     font-weight: bold;
     z-index: 10;
     font-size: 55px; }
-  
+
   .tile.tile-super .tile-inner {
     color: #f9f6f2;
     background: #3c3a32;
@@ -492,7 +492,7 @@ hr {
     width: 280px;
     margin: 0 auto; }
 
-  .score-container, .best-container {
+  .level-container, .best-container {
     margin-top: 0;
     padding: 15px 10px;
     min-width: 40px; }

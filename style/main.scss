@@ -59,12 +59,12 @@ h1.title {
   }
 }
 
-.scores-container {
+.levels-container {
   float: right;
   text-align: right;
 }
 
-.score-container, .best-container {
+.level-container, .best-container {
   $height: 25px;
 
   position: relative;
@@ -92,7 +92,7 @@ h1.title {
     color: $tile-color;
   }
 
-  .score-addition {
+  .level-addition {
     position: absolute;
     right: 30px;
     color: red;
@@ -106,8 +106,8 @@ h1.title {
   }
 }
 
-.score-container:after {
-  content: "Score";
+.level-container:after {
+  content: "Level";
 }
 
 .best-container:after {
@@ -500,7 +500,7 @@ hr {
     margin: 0 auto;
   }
 
-  .score-container, .best-container {
+  .level-container, .best-container {
     margin-top: 0;
     padding: 15px 10px;
     min-width: 40px;

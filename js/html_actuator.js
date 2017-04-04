@@ -1,10 +1,10 @@
 function HTMLActuator() {
   this.tileContainer    = document.querySelector(".tile-container");
-  this.scoreContainer   = document.querySelector(".score-container");
+  this.levelContainer   = document.querySelector(".level-container");
   this.bestContainer    = document.querySelector(".best-container");
   this.messageContainer = document.querySelector(".game-message");
 
-  this.score = 0;
+  this.level = 0;
 }
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
@@ -21,12 +21,12 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
       });
     });
 
-    self.updateScore(metadata.score);
-    self.updateBestScore(metadata.bestScore);
+    self.updatelevel(metadata.level);
+    self.updateBestlevel(metadata.bestlevel);
 
     if (metadata.terminated) {
       if (metadata.over) {
-        self.message(false); // You lose
+        self.message(true); // You lose
       } else if (metadata.won) {
         self.message(true); // You win!
       }
@@ -103,25 +103,25 @@ HTMLActuator.prototype.positionClass = function (position) {
   return "tile-position-" + position.x + "-" + position.y;
 };
 
-HTMLActuator.prototype.updateScore = function (score) {
-  this.clearContainer(this.scoreContainer);
+HTMLActuator.prototype.updatelevel = function (level) {
+  this.clearContainer(this.levelContainer);
 
-  var difference = score - this.score;
-  this.score = score;
+  var difference = level - this.level;
+  this.level = level;
+  this.levelContainer.textContent = this.level;
 
-  this.scoreContainer.textContent = this.score;
-
-  if (difference > 0) {
+  // TODO: enable when we do multiple levels to solve
+  if (false) { //if (difference > 0) {
     var addition = document.createElement("div");
-    addition.classList.add("score-addition");
+    addition.classList.add("level-addition");
     addition.textContent = "+" + difference;
 
-    this.scoreContainer.appendChild(addition);
+    this.levelContainer.appendChild(addition);
   }
 };
 
-HTMLActuator.prototype.updateBestScore = function (bestScore) {
-  this.bestContainer.textContent = bestScore;
+HTMLActuator.prototype.updateBestlevel = function (bestlevel) {
+  this.bestContainer.textContent = bestlevel;
 };
 
 HTMLActuator.prototype.message = function (won) {

@@ -20,8 +20,6 @@ GameManager.prototype.restart = function () {
   this.setup();
 };
 
-//TODO: Remove as this is not needed
-// Keep playing after winning (allows going over 2048)
 GameManager.prototype.keepPlaying = function () {
   this.keepPlaying = true;
   this.actuator.continueGame(); // Clear the game won/lost message
@@ -40,13 +38,13 @@ GameManager.prototype.setup = function () {
   if (previousState) {
     this.grid        = new Grid(previousState.grid.size,
                                 previousState.grid.cells); // Reload grid
-    this.score       = previousState.score;
+    this.level       = previousState.level;
     this.over        = previousState.over;
     this.won         = previousState.won;
     this.keepPlaying = previousState.keepPlaying;
   } else {
     this.grid        = new Grid(this.size);
-    this.score       = 0;
+    this.level       = this.startTiles;
     this.over        = false;
     this.won         = false;
     this.keepPlaying = false;
@@ -76,8 +74,8 @@ GameManager.prototype.addRandomTile = function (value) {
 
 // Sends the updated grid to the actuator
 GameManager.prototype.actuate = function () {
-  if (this.storageManager.getBestScore() < this.score) {
-    this.storageManager.setBestScore(this.score);
+  if (this.storageManager.getBestlevel() < this.level) {
+    this.storageManager.setBestlevel(this.level);
   }
 
   // Clear the state when the game is over (game over only, not win)
@@ -88,10 +86,10 @@ GameManager.prototype.actuate = function () {
   }
 
   this.actuator.actuate(this.grid, {
-    score:      this.score,
+    level:      this.level,
     over:       this.over,
     won:        this.won,
-    bestScore:  this.storageManager.getBestScore(),
+    bestlevel:  this.storageManager.getBestlevel(),
     terminated: this.isGameTerminated()
   });
 
@@ -101,7 +99,7 @@ GameManager.prototype.actuate = function () {
 GameManager.prototype.serialize = function () {
   return {
     grid:        this.grid.serialize(),
-    score:       this.score,
+    level:       this.level,
     over:        this.over,
     won:         this.won,
     keepPlaying: this.keepPlaying
@@ -130,13 +128,15 @@ GameManager.prototype.move = function (direction) {
   // 0: up, 1: right, 2: down, 3: left
   var self = this;
 
-  // if (this.isGameTerminated()) return; // Don't do anything if the game's over
+  if (this.isGameTerminated()) return;
 
   var cell, tile;
 
-  var vector     = this.getVector(direction);
-  var traversals = this.buildTraversals(vector);
-  var moved      = false;
+  var vector      = this.getVector(direction);
+  var traversals  = this.buildTraversals(vector);
+  var moved       = false;
+  var tileCount   = 1;
+  var correctness = true;
 
   // Save the current tile positions and remove merger information
   this.prepareTiles();
@@ -156,12 +156,15 @@ GameManager.prototype.move = function (direction) {
         if (!self.positionsEqual(cell, tile)) {
           moved = true; // The tile moved from its original cell!
         }
+        if (correctness && tile.value && tile.value !== (tileCount)) {
+          correctness = false;
+        }
       }
+      tileCount++;
     });
   });
-
   if (moved) {
-    if (!this.movesAvailable()) {
+    if (correctness) {
       this.over = true; // Game over!
     }
     this.actuate();
@@ -214,6 +217,7 @@ GameManager.prototype.findFarthestPosition = function (cell, vector) {
 };
 
 GameManager.prototype.movesAvailable = function () {
+  debugger;
   // TODO: rewrite so that we calculate if the game is over (in order)
   return true;
 };
