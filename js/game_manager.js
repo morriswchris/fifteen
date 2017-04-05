@@ -142,8 +142,8 @@ GameManager.prototype.move = function (direction) {
   this.prepareTiles();
 
   // Traverse the grid in the right direction and move tiles
-  traversals.x.forEach(function (x) {
-    traversals.y.forEach(function (y) {
+  traversals.y.forEach(function (y) {
+    traversals.x.forEach(function (x) {
       cell = { x: x, y: y };
       tile = self.grid.cellContent(cell);
 
@@ -156,17 +156,16 @@ GameManager.prototype.move = function (direction) {
         if (!self.positionsEqual(cell, tile)) {
           moved = true; // The tile moved from its original cell!
         }
-        if (correctness && tile.value && tile.value !== (tileCount)) {
-          correctness = false;
-        }
+
+      }
+      if (correctness && tile && tile.value !== (tileCount)) {
+        correctness = false;
       }
       tileCount++;
     });
   });
-  if (moved) {
-    if (correctness) {
-      this.over = true; // Game over!
-    }
+  if (correctness || moved) {
+    this.over = correctness; // Game over!
     this.actuate();
   }
 };
@@ -192,11 +191,6 @@ GameManager.prototype.buildTraversals = function (vector) {
     traversals.x.push(pos);
     traversals.y.push(pos);
   }
-
-  // Always traverse from the farthest cell in the chosen direction
-  if (vector.x === 1) traversals.x = traversals.x.reverse();
-  if (vector.y === 1) traversals.y = traversals.y.reverse();
-
   return traversals;
 };
 
@@ -217,7 +211,6 @@ GameManager.prototype.findFarthestPosition = function (cell, vector) {
 };
 
 GameManager.prototype.movesAvailable = function () {
-  debugger;
   // TODO: rewrite so that we calculate if the game is over (in order)
   return true;
 };

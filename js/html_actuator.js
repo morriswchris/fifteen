@@ -41,7 +41,7 @@ HTMLActuator.prototype.continueGame = function () {
 };
 
 HTMLActuator.prototype.clearContainer = function (container) {
-  while (container.firstChild) {
+  while (container && container.firstChild) {
     container.removeChild(container.firstChild);
   }
 };
@@ -108,10 +108,10 @@ HTMLActuator.prototype.updatelevel = function (level) {
 
   var difference = level - this.level;
   this.level = level;
-  this.levelContainer.textContent = this.level;
 
   // TODO: enable when we do multiple levels to solve
   if (false) { //if (difference > 0) {
+    this.levelContainer.textContent = this.level;
     var addition = document.createElement("div");
     addition.classList.add("level-addition");
     addition.textContent = "+" + difference;
@@ -121,7 +121,9 @@ HTMLActuator.prototype.updatelevel = function (level) {
 };
 
 HTMLActuator.prototype.updateBestlevel = function (bestlevel) {
-  this.bestContainer.textContent = bestlevel;
+  //TODO: enable when we have levels
+  return;
+  // this.bestContainer.textContent = bestlevel;
 };
 
 HTMLActuator.prototype.message = function (won) {
