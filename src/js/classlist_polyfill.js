@@ -1,48 +1,50 @@
-(function () {
+(() => {
   if (typeof window.Element === "undefined" ||
       "classList" in document.documentElement) {
     return;
   }
 
-  var prototype = Array.prototype,
-      push = prototype.push,
-      splice = prototype.splice,
-      join = prototype.join;
+  const prototype = Array.prototype, push = prototype.push, splice = prototype.splice, join = prototype.join;
 
-  function DOMTokenList(el) {
-    this.el = el;
-    // The className needs to be trimmed and split on whitespace
-    // to retrieve a list of classes.
-    var classes = el.className.replace(/^\s+|\s+$/g, '').split(/\s+/);
-    for (var i = 0; i < classes.length; i++) {
-      push.call(this, classes[i]);
+  class DOMTokenList {
+    constructor(el) {
+      this.el = el;
+      // The className needs to be trimmed and split on whitespace
+      // to retrieve a list of classes.
+      const classes = el.className.replace(/^\s+|\s+$/g, '').split(/\s+/);
+      for (let i = 0; i < classes.length; i++) {
+        push.call(this, classes[i]);
+      }
     }
-  }
 
-  DOMTokenList.prototype = {
-    add: function (token) {
+    add(token) {
       if (this.contains(token)) return;
       push.call(this, token);
       this.el.className = this.toString();
-    },
-    contains: function (token) {
+    }
+
+    contains(token) {
       return this.el.className.indexOf(token) != -1;
-    },
-    item: function (index) {
+    }
+
+    item(index) {
       return this[index] || null;
-    },
-    remove: function (token) {
+    }
+
+    remove(token) {
       if (!this.contains(token)) return;
-      for (var i = 0; i < this.length; i++) {
+      for (let i = 0; i < this.length; i++) {
         if (this[i] == token) break;
       }
       splice.call(this, i, 1);
       this.el.className = this.toString();
-    },
-    toString: function () {
+    }
+
+    toString() {
       return join.call(this, ' ');
-    },
-    toggle: function (token) {
+    }
+
+    toggle(token) {
       if (!this.contains(token)) {
         this.add(token);
       } else {
@@ -51,7 +53,7 @@
 
       return this.contains(token);
     }
-  };
+  }
 
   window.DOMTokenList = DOMTokenList;
 
@@ -65,7 +67,7 @@
     }
   }
 
-  defineElementGetter(HTMLElement.prototype, 'classList', function () {
+  defineElementGetter(HTMLElement.prototype, 'classList', function() {
     return new DOMTokenList(this);
   });
 })();
