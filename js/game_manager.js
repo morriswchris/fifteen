@@ -156,12 +156,11 @@ GameManager.prototype.move = function (direction) {
         if (!self.positionsEqual(cell, tile)) {
           moved = true; // The tile moved from its original cell!
         }
-
+        if (correctness && tile && tile.value !== (tileCount)) {
+          correctness = false;
+        }
+        tileCount++;
       }
-      if (correctness && tile && tile.value !== (tileCount)) {
-        correctness = false;
-      }
-      tileCount++;
     });
   });
   if (correctness || moved) {
